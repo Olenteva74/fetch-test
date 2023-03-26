@@ -9,8 +9,8 @@ const articleList = document.querySelector(".card-news__list");
           <picture>
          
           <img
-          src=${multimedia ? multimedia[1].url : ""}
-          alt=${multimedia ? multimedia[1].caption : "news image"}
+          src=${img}
+          alt= "news image"
           width="395"
           height="290"
         />
@@ -67,4 +67,6 @@ function getImg(images) {
   return markup;
 }
 
-//  ${multimedia ? getImg(multimedia) : ""}
+export function cleanCard() {
+  articleList.innerHTML = '';
+}

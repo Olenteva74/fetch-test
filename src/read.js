@@ -107,12 +107,15 @@ function getText(news) {
 
         return `<li class="card-news__item read">
         <div class="card-news__ovarlay">
-        <img
-        src=${multimedia ? multimedia[1].url : ""}
-        alt=alt=${multimedia ? multimedia[1].caption : "news image"}
-        width="395"
-        height="290"
-      />
+        <picture>
+         
+          <img
+          src=${img}
+          alt= "news image"
+          width="395"
+          height="290"
+        />
+        </picture>
       <p class="card-news__category">${category}</p>
       <button data-id=${id} class="card-news__button" type="button">
       Add to favirite
