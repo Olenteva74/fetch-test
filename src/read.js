@@ -4,6 +4,7 @@ import compareDesc from 'date-fns/compareDesc';
 import eachDayOfInterval from 'date-fns/eachDayOfInterval';
 import isSameDay from 'date-fns/isSameDay'
 import { save, load } from "./storage";
+import format from 'date-fns/format'
 
 
 const READ_KEY = "readNews";
@@ -37,7 +38,7 @@ function getReadNews() {
 
         const normalizeNews = readNews.filter((value) => value);
 
-        const rangeDate = getSortDate(normalizeNews);
+        const rangeDate = getSortDate(readNews);
         console.log(rangeDate);
      
         const readObj = rangeDate.reduce((obj, date) => {
@@ -80,12 +81,18 @@ function handleClickBtn(event) {
     const parsedeFavoriteNews = load(FAVORITE_KEY);
 
     const favoriteNews = parsedReadNews.find(option => option.id === favoritNewsId);
-    parsedeFavoriteNews.push(favoriteNews);
+    if(favoriteNews) {
+      parsedeFavoriteNews.push(favoriteNews);
     save(FAVORITE_KEY, parsedeFavoriteNews);
+    }
 
     const newsAfterRemove = parsedReadNews.filter(value => value.id !== favoritNewsId);
-    save(READ_KEY, newsAfterRemove);
+    if (newsAfterRemove) {
+      save(READ_KEY, newsAfterRemove);
     getReadNews();
+    }
+    // save(READ_KEY, newsAfterRemove);
+    // getReadNews();
 }
 
 
@@ -112,7 +119,7 @@ function getText(news) {
           <img
           src=${img}
           alt= "news image"
-          width="395"
+          width="360"
           height="290"
         />
         </picture>

@@ -59,10 +59,10 @@ fetchNews.query = e.target.value;
   }
   const parsedNews = await load(NEWS_KEY);
   console.log(parsedNews);
-  renderCard(parsedNews);
+  renderCard(parsedNews, "Add to favorite");
 }
 
-function normalizeObj(news) {
+export function normalizeObj(news) {
   const newsObject = news.map(
     ({
       uri,
@@ -94,20 +94,20 @@ function normalizeObj(news) {
   return newsObject;
 }
 
-function getNews() {
-    if (load(NEWS_KEY)) {
+// function getNews() {
+//     if (load(NEWS_KEY)) {
         
-      const parsedNews = load(NEWS_KEY);
-      renderCard(parsedNews, "Add to favorite");
-      }
-    const logo = document.querySelector(".logo.link");
-   logo.addEventListener("click", handleClickByLogo);
-   function handleClickByLogo(event) {
-     console.log(event.currentTarget);
-     console.log(event.target);
-     fetchNews();
-    const parsedNews = load(NEWS_KEY);
-    renderCard(parsedNews, "Add to favorite");
-   } 
+//       const parsedNews = load(NEWS_KEY);
+//       renderCard(parsedNews, "Add to favorite");
+//       }
+//     const logo = document.querySelector(".logo.link");
+//    logo.addEventListener("click", handleClickByLogo);
+//    function handleClickByLogo(event) {
+//      console.log(event.currentTarget);
+//      console.log(event.target);
+//      fetchNews();
+//     const parsedNews = load(NEWS_KEY);
+//     renderCard(parsedNews, "Add to favorite");
+//    } 
 
-}
+// }

@@ -5,7 +5,16 @@ import { save, load } from "./storage";
 const FAVORITE_KEY = "favoriteNews";
 const READ_KEY = "readNews";
 
-if (load(FAVORITE_KEY)) {
+// if (load(FAVORITE_KEY)) {
+//     const favoriteNews = load(FAVORITE_KEY);
+//     renderCard(favoriteNews, "Remove from favorite");
+// }
+getFavoriteNews();
+
+function getFavoriteNews() {
+  if (!load(FAVORITE_KEY)) {
+    return;
+  }
     const favoriteNews = load(FAVORITE_KEY);
     renderCard(favoriteNews, "Remove from favorite");
 }

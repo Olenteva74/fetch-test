@@ -1,19 +1,59 @@
 
 import './css/input.css'
+import "./search";
 import lightFormat from 'date-fns/lightFormat';
-// import { getArticles} from './getArticles';
+import { getArticles} from './getArticles';
 import { fetchNews } from './fetchNews';
-import { load, save } from './storage';
+import { load, save, remove } from './storage';
 import { renderCard } from './renderCard';
+import { normalizeObj } from './search';
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 
  
 const NEWS_KEY = "newsObject";
 const FAVORITE_KEY = "favoriteNews";
 const READ_KEY = "readNews";
+const DATE_KEY = "date";
 
 const cardNews = document.querySelector(".card-news__list");
+const searchInput = document.querySelector("#form-field");
+const dateInput = document.querySelector("#datetime-picker");
 
-fetchNews();
+const options = {
+ 
+ 
+  defaultDate:  new Date(),
+  
+  onClose(selectedDates) {
+    console.log(selectedDates[0]);
+    save(DATE_KEY, selectedDates[0]);
+  },
+};
+
+flatpickr(dateInput, options);
+console.log(dateInput.value);
+save(DATE_KEY, dateInput.value);
+// fetchNews();
+
+window.addEventListener('load', async (event) => {
+if (!load(NEWS_KEY)) {
+  try {
+    await fetchNews();
+     const parsedNews =  load(NEWS_KEY);
+  renderCard(parsedNews, "Add to favorite");
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const parsedNews = load(NEWS_KEY);
+renderCard(parsedNews, "Add to favorite");
+// if (load(DATE_KEY)) {
+//   dateInput.date.value = load(DATE_KEY);
+// }
+
+})
 
 
 if (!load(FAVORITE_KEY)) {
@@ -23,8 +63,7 @@ if (!load(READ_KEY)) {
   save(READ_KEY, []);
 }
 
-const parsedNews = load(NEWS_KEY);
-renderCard(parsedNews, "Add to favorite");
+
   
 
  cardNews.addEventListener("click", handleClickFavoriteBtn);
@@ -67,6 +106,45 @@ renderCard(parsedNews, "Add to favorite");
   parsedReadNews.push(readNews);
   save(READ_KEY, parsedReadNews);
  }
+
+
+//  const options = {
+ 
+ 
+//   defaultDate: new Date(),
+  
+//   onClose(selectedDates) {
+//     console.log(selectedDates[0]);
+//   },
+// };
+
+// flatpickr(dateInput, options);
+ 
+//  dateInput.addEventListener("change", handleChangeDate);
+//  function handleChangeDate(event) {
+//   console.log(event.target.value);
+//    save(DATE_KEY, event.target.value);
+//  }
+
+
+ searchInput.addEventListener("change", async (event) => {
+  event.preventDefault();
+  console.log(event.currentTarget);
+  const {
+    elements: {search}
+  } = event.currentTarget;
+  console.log(search.value);
+  // if (!load(DATE_KEY)) {
+  //   return;
+  // }
+  remove(NEWS_KEY);
+  const date =  await load(DATE_KEY);
+  await getArticles(event.target.value, lightFormat(new Date(date), 'yyyyMMdd'));
+  const parsedNews = await load(NEWS_KEY);
+  await renderCard(parsedNews, "Add to faforite");
+  
+ }
+ )
 
 
 

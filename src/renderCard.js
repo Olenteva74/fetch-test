@@ -1,4 +1,6 @@
 import lightFormat from 'date-fns/lightFormat';
+import { AiOutlineHeart, AiOutlineInsertRowAbove} from 'react-icons/fa';
+
 
 const articleList = document.querySelector(".card-news__list");
  export function renderCard(news, textcardBtn) {
@@ -11,7 +13,7 @@ const articleList = document.querySelector(".card-news__list");
           <img
           src=${img}
           alt= "news image"
-          width="395"
+          width="360"
           height="290"
         />
         </picture>
@@ -19,8 +21,8 @@ const articleList = document.querySelector(".card-news__list");
         <button data-id=${id} class="card-news__button" type="button">
         ${textcardBtn}
         <svg class="card-news__icon" width="16" height="16">
-          <use href="./svg/symbol-defs.svg#icon-heart-not-action"></use>
-        </svg>
+        <use href="./svg/symbol-defs.svg#icon-heart-not-action"></use>
+      </svg>
       </button>
     </div>
     <h2 class="card-news__title">
@@ -70,3 +72,7 @@ function getImg(images) {
 export function cleanCard() {
   articleList.innerHTML = '';
 }
+
+// AiOutlineHeart
+// AiOutlineInsertRowAbove
+

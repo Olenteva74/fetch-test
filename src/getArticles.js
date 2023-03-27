@@ -1,11 +1,15 @@
 import axios from 'axios';
 import lightFormat from 'date-fns/lightFormat';
+import { load, save } from './storage';
+import { normalizeObj } from './search';
 
 const API_KEY = "504jAhPgfYceC8nkznkR3u0PcVOkTNsF";
 const API_KEY_NEWS = "gLbj8EoYwaKTA6NLapVd3srb4LTB589B"
 // axios.defaults.baseURL = 'https://api.nytimes.com/svc/search/v2'; 
+const URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json"
 
-
+const DATE_KEY = "date";
+const NEWS_KEY = "newsObject";
 
 // const URL = "https://api.nytimes.com/svc/news/v3/content.json"
 // https://api.nytimes.com/svc/search/v2/articlesearch.json?q=election&api-key=yourkey
@@ -13,35 +17,38 @@ const API_KEY_NEWS = "gLbj8EoYwaKTA6NLapVd3srb4LTB589B"
 
 // https://api.nytimes.com/svc/news/v3/content/section-list.json?api-key=eQ8t8FWqeAGnKDTtIFrHmgZCflFrUTcV
 
-// export async function getNews() {
-//   try {
-//     const response = await axios.get("https://api.nytimes.com/svc/news/v3/content/all/all.json", {
-//       params: {
-//         "api-key": API_KEY_NEWS,
-//       }
-//     });
-//     console.log(response.data.results);
-//   } catch (error) {
-//     console.log(error);
-//   }
+// // export async function getNews(searchQwery) {
+// //   try {
+// //     const response = await axios.get(URL, {
+// //       params: {
+// //         fq: searchQwery,
+// //         "api-key": API_KEY_NEWS,
+// //       }
+// //     });
+// //     console.log(response.data.results);
+// //   } catch (error) {
+// //     console.log(error);
+// //   }
 // }
 
-export async function getArticles(query) {
+
+export async function getArticles(query, date) {
     try {
-      const response = await axios.get('/articlesearch.json',{
+      const response = await axios.get(URL,{
         params: {
             fq: query,
-            page: 0,
-            // begin_date: 20230317,
+            section_name: query,
+            // page: 0,
+            begin_date: date,
+            end_date: date,
             // sort: "newest",
             "api-key": API_KEY,
             
           }
       });
-      console.log(response.data);
-      // const {docs} = response.data.response;
-      // renderArticle(docs);
-      // return response;
+      console.log(response.data.response.docs);
+      const saveObj = await normalizeObj(response.data.response.docs);
+      await save(NEWS_KEY, saveObj);
     } catch (error) {
       console.error(error);
     }
