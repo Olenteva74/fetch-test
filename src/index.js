@@ -28,6 +28,7 @@ const dateInput = document.querySelector("#datetime-picker");
 const paginationBtn = document.querySelector(".pagination__list-button");
 const paginationPrevBtn = document.querySelector("#prev");
 const paginationNextBtn = document.querySelector("#next");
+const arrayPaginationBtn = document.querySelectorAll(".pagination__item");
 
 const options = {
  
@@ -67,6 +68,9 @@ function updateNewsPage() {
   paginationBtn.addEventListener("click", (event) => {
     paginationIndex = Number(event.target.dataset.id);
     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+    const addActive = document.querySelector(`button [data-id="${paginationIndex}"]`);
+    addActive.style.backgroundColor = "#4440F7";
+    addActive.style.color = "#fff";
 
    });
 

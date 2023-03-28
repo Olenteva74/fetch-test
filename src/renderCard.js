@@ -38,7 +38,7 @@ const articleList = document.querySelector(".card-news__list");
       </li>`  
     }).join("");
     articleList.innerHTML = markup;
-    console.log(news)
+    // console.log(news)
 } 
 
 
