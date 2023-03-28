@@ -15,8 +15,12 @@ function getFavoriteNews() {
   if (!load(FAVORITE_KEY)) {
     return;
   }
+  
     const favoriteNews = load(FAVORITE_KEY);
-    renderCard(favoriteNews, "Remove from favorite");
+    if (favoriteNews) {
+      renderCard(favoriteNews);
+    }
+   
 }
 
 

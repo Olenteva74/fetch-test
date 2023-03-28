@@ -7,6 +7,7 @@ import { fetchNews } from './fetchNews';
 import { load, save, remove } from './storage';
 import { renderCard } from './renderCard';
 import { normalizeObj } from './search';
+import { renderPaginationBtn, getNewsByPage, getnewsPerPage} from './pagination';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
@@ -16,9 +17,17 @@ const FAVORITE_KEY = "favoriteNews";
 const READ_KEY = "readNews";
 const DATE_KEY = "date";
 
+let newsPerPage = 0;
+let paginationIndex = 0;
+
+
 const cardNews = document.querySelector(".card-news__list");
 const searchInput = document.querySelector("#form-field");
 const dateInput = document.querySelector("#datetime-picker");
+
+const paginationBtn = document.querySelector(".pagination__list-button");
+const paginationPrevBtn = document.querySelector("#prev");
+const paginationNextBtn = document.querySelector("#next");
 
 const options = {
  
@@ -32,28 +41,97 @@ const options = {
 };
 
 flatpickr(dateInput, options);
-console.log(dateInput.value);
 save(DATE_KEY, dateInput.value);
-// fetchNews();
 
 window.addEventListener('load', async (event) => {
-if (!load(NEWS_KEY)) {
   try {
     await fetchNews();
-     const parsedNews =  load(NEWS_KEY);
-  renderCard(parsedNews, "Add to favorite");
-  } catch (error) {
+   updateNewsPage();
+  } catch(error) {
     console.log(error.message);
   }
+});
+
+// updateNewsPage();
+function updateNewsPage() {
+  const parsedNews = load(NEWS_KEY);
+   
+  newsPerPage = getnewsPerPage();
+  const totalCard = parsedNews.length;
+  const totalPage = Math.ceil(totalCard / newsPerPage);
+  // totalPage ? paginationWrapper.classList.remove("hidden") : paginationWrapper.classList.add("hidden")
+  renderPaginationBtn(totalPage);
+  getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+  
+
+  paginationBtn.addEventListener("click", (event) => {
+    paginationIndex = Number(event.target.dataset.id);
+    getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+
+   });
+
+   paginationPrevBtn.addEventListener("click", (event) => {
+    if (paginationIndex === 0) {
+      return;
+    }
+    paginationIndex -= 1;
+    getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+   });
+
+   paginationNextBtn.addEventListener("click", (event) => {
+    if (paginationIndex === totalPage - 1) {
+      return;
+    }
+    paginationIndex += 1;
+    getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+   });
+  
 }
 
-const parsedNews = load(NEWS_KEY);
-renderCard(parsedNews, "Add to favorite");
-// if (load(DATE_KEY)) {
-//   dateInput.date.value = load(DATE_KEY);
+
+
+
+
+// window.addEventListener('load', async (event) => {
+
+// try {
+//   await fetchNews();
+//    const parsedNews = load(NEWS_KEY);
+   
+//   newsPerPage = getnewsPerPage();
+//   const totalCard = parsedNews.length;
+//   const totalPage = Math.ceil(totalCard / newsPerPage);
+//   getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+//   renderPaginationBtn(totalPage);
+
+//    paginationBtn.addEventListener("click", (event) => {
+//     paginationIndex = Number(event.target.dataset.id);
+//     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+
+//    })
+
+//    paginationPrevBtn.addEventListener("click", (event) => {
+//     if (paginationIndex === 0) {
+//       return;
+//     }
+//     paginationIndex -= 1;
+//     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+//    })
+
+//    paginationNextBtn.addEventListener("click", (event) => {
+//     if (paginationIndex === totalPage - 1) {
+//       return;
+//     }
+//     paginationIndex += 1;
+//     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+//    })
+
+// } catch (error) {
+//   console.log(error.message);
 // }
 
-})
+
+// })
 
 
 if (!load(FAVORITE_KEY)) {
@@ -75,6 +153,11 @@ if (!load(READ_KEY)) {
   }
   const favoritNewsId = event.target.dataset.id;
   
+  event.target.textContent = "Remove from favorite";
+  
+
+
+  
   const parsedNews = load(NEWS_KEY);
   const parsedeFavoriteNews = load(FAVORITE_KEY);
 
@@ -83,9 +166,9 @@ if (!load(READ_KEY)) {
   save(FAVORITE_KEY, parsedeFavoriteNews);
 
   
-  const newsAfterRemove = parsedNews.filter(value => value.id !== favoritNewsId);
-  renderCard(newsAfterRemove, "Add to favorite");
-  save(NEWS_KEY, newsAfterRemove);
+  // const newsAfterRemove = parsedNews.filter(value => value.id !== favoritNewsId);
+  // renderCard(newsAfterRemove, "Add to favorite");
+  // save(NEWS_KEY, newsAfterRemove);
   
  }
 
@@ -94,8 +177,11 @@ if (!load(READ_KEY)) {
   if (event.target.nodeName !== "A") {
     return;
   }
-  console.log(event.target);
   const readCardUrl = event.target.dataset.url;
+  const readEl = document.querySelector(`li[data-read="${readCardUrl}"]`);
+  readEl.style.opacity="0.5";
+  console.log(readEl);
+ 
  
   const parsedNews = load(NEWS_KEY);
   console.log(parsedNews)
@@ -137,11 +223,12 @@ if (!load(READ_KEY)) {
   // if (!load(DATE_KEY)) {
   //   return;
   // }
-  remove(NEWS_KEY);
+  // remove(NEWS_KEY);
   const date =  await load(DATE_KEY);
   await getArticles(event.target.value, lightFormat(new Date(date), 'yyyyMMdd'));
-  const parsedNews = await load(NEWS_KEY);
-  await renderCard(parsedNews, "Add to faforite");
+  updateNewsPage();
+  // const parsedNews = await load(NEWS_KEY);
+  // await renderCard(parsedNews, "Add to faforite");
   
  }
  )

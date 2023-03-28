@@ -1,6 +1,6 @@
 import axios from 'axios';
 import lightFormat from 'date-fns/lightFormat';
-import { load, save } from './storage';
+import { load, save, remove } from './storage';
 import { normalizeObj } from './search';
 
 const API_KEY = "504jAhPgfYceC8nkznkR3u0PcVOkTNsF";
@@ -48,7 +48,8 @@ export async function getArticles(query, date) {
       });
       console.log(response.data.response.docs);
       const saveObj = await normalizeObj(response.data.response.docs);
-      await save(NEWS_KEY, saveObj);
+      remove(NEWS_KEY);
+      save(NEWS_KEY, saveObj);
     } catch (error) {
       console.error(error);
     }

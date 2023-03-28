@@ -34,12 +34,26 @@
       </div>
     </header>
     <input type="text" id="datetime-picker" name="date">
+    <svg class="card-news__icon" width="16" height="16">
+      <use href="./svg/symbol-defs.svg#icon-heart-not-action"></use>
+    </svg>
     <section class="card-news">
       <div class="container">
         <ul class="card-news__list">
           </ul>
        </div>
+       <div class="pagination hidden">
+        <ul class="pagination__list">
+          <li class="pagination__item"><button class="pagination__button-prev" type="button" id="prev">Prev</button></li>
+          <ul class="pagination__list-button"></ul>
+          <li class="pagination__item-next"><button class="pagination__button-next" type="button"id="next">Next</button></li>
+         
+        </ul>
+      </div>
        </section>
+       <!-- <li class="pagination__item"><button type="button" data-id="prev">prev</button></li>
+       <li class="pagination__item"><button class="pagination__button"  type="button"></button></li>
+       <li class="pagination__item"><button type="button">next</button></li> -->
 
     <script src="index.js" type="module"></script>
   </body>

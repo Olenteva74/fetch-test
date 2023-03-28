@@ -2,11 +2,12 @@ import lightFormat from 'date-fns/lightFormat';
 import { AiOutlineHeart, AiOutlineInsertRowAbove} from 'react-icons/fa';
 
 
+const SVG_URL = "./svg/symbol-defs.svg#icon-heart-not-action";
 const articleList = document.querySelector(".card-news__list");
- export function renderCard(news, textcardBtn) {
+ export function renderCard(news) {
     const markup = news.map(({id, title, paragraph, img, data, url, category, multimedia}) => {
 
-          return `<li class="card-news__item">
+          return `<li class="card-news__item" data-read=${url}>
           <div class="card-news__ovarlay">
           <picture>
          
@@ -19,9 +20,9 @@ const articleList = document.querySelector(".card-news__list");
         </picture>
         <p class="card-news__category">${category}</p>
         <button data-id=${id} class="card-news__button" type="button">
-        ${textcardBtn}
+        Add to favorite
         <svg class="card-news__icon" width="16" height="16">
-        <use href="./svg/symbol-defs.svg#icon-heart-not-action"></use>
+        <use href="./svg/symbol-defs.svg#icon-heart"></use>
       </svg>
       </button>
     </div>
@@ -73,6 +74,4 @@ export function cleanCard() {
   articleList.innerHTML = '';
 }
 
-// AiOutlineHeart
-// AiOutlineInsertRowAbove
 
