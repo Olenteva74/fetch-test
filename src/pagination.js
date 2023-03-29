@@ -6,7 +6,7 @@ const paginationBtn = document.querySelector(".pagination__list-button");
 let newsPerPage = 0;
 
 
-export function renderPaginationBtn(total) {
+export function renderPaginationBtn(total, activeIndex) {
  
 
         paginationWrapper.classList.remove("hidden");
@@ -20,7 +20,7 @@ export function renderPaginationBtn(total) {
        
         paginationBtn.innerHTML = markup;
   
-   
+   getActiveBtn(activeIndex);
 }
 
 export function getNewsByPage(perPage, activeIndex, news) {
@@ -47,3 +47,14 @@ export  function getnewsPerPage() {
       return newsPerPage;
 }
 
+
+export function getActiveBtn(index) {
+  const allBtn = document.getElementsByClassName("pagination__button");
+  console.log(allBtn.length)
+ Array.from({ length: allBtn.length}, (v, k) => k).forEach((element) => {
+    allBtn[element].classList.remove("current");
+ });
+
+ allBtn[index].classList.add("current");
+  
+}

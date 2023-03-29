@@ -18,7 +18,10 @@ function getFavoriteNews() {
   
     const favoriteNews = load(FAVORITE_KEY);
     if (favoriteNews) {
-      renderCard(favoriteNews);
+      const filterFavoriteNews = favoriteNews.filter((item) => {
+        item
+      })
+      renderCard(filterFavoriteNews);
     }
    
 }

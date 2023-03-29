@@ -14,23 +14,6 @@ const dateWrapper = document.querySelector(".date__wrapper");
 
 getReadNews()
 
-// if (load(READ_KEY).length) {
- 
-//    const readNews = load(READ_KEY);
-//    const rangeDate = getSortDate(readNews);
-//    console.log(rangeDate);
-
-//    const readObj = rangeDate.reduce((obj, date) => {
-//      obj[date] = readNews.filter((value) => {
-//         return isSameDay(new Date(date), new Date(value.data));
-//      });
-//      return obj;
-//    }, {});
-   
-//    renderCardRead(readObj);
-
-// }
-
 function getReadNews() {
     if (load(READ_KEY).length) {
  
@@ -49,6 +32,11 @@ function getReadNews() {
           });
           return obj;
         }, {});
+        console.log(readObj);
+        console.log("hu")
+        // const filterReadObj = Object.keys(readObj).filter((item) => {
+        //   return readObj[item].length > 0;
+        // })
         
         renderCardRead(readObj);
      
@@ -61,7 +49,9 @@ function getSortDate(news) {
      });
      console.log(dateArray);
 
-     const sortDateArray = dateArray.sort(compareDesc);
+    //  const sortDateArray = dateArray.sort(compareDesc);
+    const sortDateArray = dateArray.filter((item) => {return item }).sort(compareDesc);
+
 
      const rangeDate = eachDayOfInterval({
         start: new Date(sortDateArray[sortDateArray.length - 1]),
@@ -70,6 +60,8 @@ function getSortDate(news) {
       return rangeDate.sort(compareDesc);
 
 }
+
+
 
 dateWrapper.addEventListener("click", handleClickBtn);
 function handleClickBtn(event) {
@@ -99,7 +91,11 @@ function handleClickBtn(event) {
 
 
 function renderCardRead(readObj) {
-   const markup = Object.keys(readObj).map((item, index) => {
+   const markup = Object.keys(readObj)
+   .filter((item) => {
+    return readObj[item].length !== 0;
+   })
+   .map((item, index) => {
         
         return `  <li class="date__item" data-index=${index}>
         <div class="date__card"><h3 class="date__text">${lightFormat(new Date(item

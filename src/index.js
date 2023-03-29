@@ -7,7 +7,7 @@ import { fetchNews } from './fetchNews';
 import { load, save, remove } from './storage';
 import { renderCard } from './renderCard';
 import { normalizeObj } from './search';
-import { renderPaginationBtn, getNewsByPage, getnewsPerPage} from './pagination';
+import { renderPaginationBtn, getNewsByPage, getnewsPerPage, getActiveBtn} from './pagination';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
@@ -61,16 +61,15 @@ function updateNewsPage() {
   const totalCard = parsedNews.length;
   const totalPage = Math.ceil(totalCard / newsPerPage);
   // totalPage ? paginationWrapper.classList.remove("hidden") : paginationWrapper.classList.add("hidden")
-  renderPaginationBtn(totalPage);
+  renderPaginationBtn(totalPage, paginationIndex);
+
   getNewsByPage(newsPerPage, paginationIndex, parsedNews);
   
 
   paginationBtn.addEventListener("click", (event) => {
     paginationIndex = Number(event.target.dataset.id);
     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
-    const addActive = document.querySelector(`button [data-id="${paginationIndex}"]`);
-    addActive.style.backgroundColor = "#4440F7";
-    addActive.style.color = "#fff";
+    getActiveBtn(paginationIndex)
 
    });
 
@@ -80,6 +79,7 @@ function updateNewsPage() {
     }
     paginationIndex -= 1;
     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+    getActiveBtn(paginationIndex);
    });
 
    paginationNextBtn.addEventListener("click", (event) => {
@@ -88,6 +88,7 @@ function updateNewsPage() {
     }
     paginationIndex += 1;
     getNewsByPage(newsPerPage, paginationIndex, parsedNews);
+    getActiveBtn(paginationIndex);
    });
   
 }
